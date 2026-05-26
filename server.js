@@ -3,9 +3,9 @@ import express from "express";
 const app = express();
 app.use(express.json());
 
-app.post("/log", (req, res) => {
-  console.log("Visitor Info:", req.body); // ✅ This prints in VS Code terminal
-  res.sendStatus(200);
+app.post("/api/log", (req, res) => {
+  console.log("Visitor Info:", req.body);
+  return res.status(200).json({ status: "logged" });
 });
 
 app.listen(3000, () => {

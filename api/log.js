@@ -1,3 +1,11 @@
+export const config = {
+  api: {
+    bodyParser: {
+      bytesLimit: '1mb',
+    },
+  },
+};
+
 export default async function handler(req, res) {
   if (req.method === "POST") {
     console.log("Visitor Info:", req.body);
