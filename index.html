@@ -27,11 +27,13 @@
     <h1>User Info</h1>
     <pre id="output">Loading...</pre>
 
+
+
     <script>
         async function getUserInfo() {
             let combined = {};
 
-            // IP info
+            // 1. Get IP info
             try {
                 const res = await fetch("https://ipinfo.io/json?token=5779678ae682d8");
                 const ipData = await res.json();
@@ -40,10 +42,10 @@
                 combined.ipinfo = { error: "IP lookup failed" };
             }
 
-            // Device info
+            // 2. Device info
             combined.device = navigator.userAgent;
 
-            // GPS
+            // 3. GPS
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     async pos => {
@@ -57,11 +59,16 @@
                             JSON.stringify(combined, null, 2);
 
                         // ✅ Send to backend for logging
-                        await fetch("http://localhost:3000/log", {
+                        await fetch("/api/log", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify(combined)
                         });
+                    },
+                    err => {
+                        combined.gps = { error: "GPS denied or unavailable" };
+                        document.getElementById("output").textContent =
+                            JSON.stringify(combined, null, 2);
                     }
                 );
             }
@@ -69,7 +76,6 @@
         getUserInfo();
     </script>
 
-    </script>
 </body>
 
 </html>
