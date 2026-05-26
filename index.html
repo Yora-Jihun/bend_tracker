@@ -52,11 +52,11 @@
                         // Save GPS
                         combined.gps = { latitude, longitude };
 
-                        // Override IP location with GPS
+                        // 🚨 Override IP fields with GPS
                         combined.ipinfo.loc = latitude + "," + longitude;
-                        combined.ipinfo.city = "Based on GPS";
-                        combined.ipinfo.region = "";
-                        combined.ipinfo.country = "";
+                        combined.ipinfo.city = "GPS-based location";
+                        combined.ipinfo.region = "Precise coordinates";
+                        combined.ipinfo.country = "User allowed GPS";
 
                         // Optional: reverse geocode GPS into address
                         try {
