@@ -24,10 +24,9 @@ export default async function handler(req, res) {
     const response = await fetch("https://ipinfo.io/json?token=5779678ae682d8");
     const data = await response.json();
 
-    // Log IP info directly to your terminal
+    // Logs show in VS Code when running `vercel dev`
     console.log("Visitor IP Info:", data);
 
-    // Optionally still return it to the client
     res.status(200).json(data);
   } catch (err) {
     console.error("Error fetching IP info:", err);
