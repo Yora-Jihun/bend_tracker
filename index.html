@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Info Tracker</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #111; color: #eee; padding: 2rem; }
+    h1 { color: #4cafef; }
+    pre { background: #222; padding: 1rem; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>User Info</h1>
+  <pre id="output">Loading...</pre>
+
+  <script>
+    async function getUserInfo() {
+      let combined = {};
+
+      // 1. Get IP info from backend
+      try {
+        const res = await fetch("/api/ipinfo");
+        const ipData = await res.json();
+        combined.ipinfo = ipData;
+      } catch {
+        combined.ipinfo = { error: "IP lookup failed" };
+      }
+
+      // 2. Add device info
+      combined.device = navigator.userAgent;
+
+      // 3. Try GPS
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            combined.gps = {
+              latitude: pos.coords.latitude,
+              longitude: pos.coords.longitude
+            };
+            document.getElementById("output").textContent =
+              JSON.stringify(combined, null, 2);
+          },
+          err => {
+            combined.gps = { error: "GPS denied or unavailable" };
+            document.getElementById("output").textContent =
+              JSON.stringify(combined, null, 2);
+          }
+        );
+      } else {
+        combined.gps = { error: "GPS not supported" };
+        document.getElementById("output").textContent =
+          JSON.stringify(combined, null, 2);
+      }
+    }
+
+    getUserInfo();
+  </script>
+</body>
+</html>
