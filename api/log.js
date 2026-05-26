@@ -1,9 +1,5 @@
 import { neon } from '@neondatabase/serverless';
 
-export const config = {
-  runtime: 'nodejs20.x',
-};
-
 const sql = neon(process.env.DATABASE_URL);
 
 export default async function handler(req, res) {
