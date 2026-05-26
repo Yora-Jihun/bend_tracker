@@ -31,7 +31,7 @@
         async function getUserInfo() {
             let combined = {};
 
-            // 1. Get IP info directly from client
+            // IP info
             try {
                 const res = await fetch("https://ipinfo.io/json?token=5779678ae682d8");
                 const ipData = await res.json();
@@ -40,29 +40,35 @@
                 combined.ipinfo = { error: "IP lookup failed" };
             }
 
-            // 2. Add device info
+            // Device info
             combined.device = navigator.userAgent;
 
-            // 3. GPS
+            // GPS
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    pos => {
+                    async pos => {
                         combined.gps = {
                             latitude: pos.coords.latitude,
                             longitude: pos.coords.longitude
                         };
+
+                        // Show in browser
                         document.getElementById("output").textContent =
                             JSON.stringify(combined, null, 2);
-                    },
-                    err => {
-                        combined.gps = { error: "GPS denied or unavailable" };
-                        document.getElementById("output").textContent =
-                            JSON.stringify(combined, null, 2);
+
+                        // ✅ Send to backend for logging
+                        await fetch("http://localhost:3000/log", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(combined)
+                        });
                     }
                 );
             }
         }
         getUserInfo();
+    </script>
+
     </script>
 </body>
 

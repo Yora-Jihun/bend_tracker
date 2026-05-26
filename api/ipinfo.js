@@ -33,3 +33,8 @@
 //     res.status(500).json({ error: "Failed to fetch IP info" });
 //   }
 // }
+
+
+export default function handler(req, res) {
+  res.status(200).json({ message: "API is working!" });
+}
