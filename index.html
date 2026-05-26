@@ -31,9 +31,9 @@
         async function getUserInfo() {
             let combined = {};
 
-            // 1. Get IP info from backend
+            // 1. Get IP info directly from client
             try {
-                const res = await fetch("/api/ipinfo");
+                const res = await fetch("https://ipinfo.io/json?token=5779678ae682d8");
                 const ipData = await res.json();
                 combined.ipinfo = ipData;
             } catch {
@@ -43,32 +43,14 @@
             // 2. Add device info
             combined.device = navigator.userAgent;
 
-            // 3. GPS override
+            // 3. GPS
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    async pos => {
-                        const { latitude, longitude } = pos.coords;
-
-                        // Save GPS
-                        combined.gps = { latitude, longitude };
-
-                        // 🚨 Override IP fields with GPS
-                        combined.ipinfo.loc = latitude + "," + longitude;
-                        combined.ipinfo.city = "GPS-based location";
-                        combined.ipinfo.region = "Precise coordinates";
-                        combined.ipinfo.country = "User allowed GPS";
-
-                        // Optional: reverse geocode GPS into address
-                        try {
-                            const geoRes = await fetch(
-                                `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=YOUR_KEY`
-                            );
-                            const geoData = await geoRes.json();
-                            combined.gps.address = geoData.results[0].formatted;
-                        } catch {
-                            combined.gps.address = "Reverse geocoding failed";
-                        }
-
+                    pos => {
+                        combined.gps = {
+                            latitude: pos.coords.latitude,
+                            longitude: pos.coords.longitude
+                        };
                         document.getElementById("output").textContent =
                             JSON.stringify(combined, null, 2);
                     },
@@ -78,14 +60,8 @@
                             JSON.stringify(combined, null, 2);
                     }
                 );
-            } else {
-                combined.gps = { error: "GPS not supported" };
-                document.getElementById("output").textContent =
-                    JSON.stringify(combined, null, 2);
             }
         }
-
-
         getUserInfo();
     </script>
 </body>
