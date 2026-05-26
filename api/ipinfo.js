@@ -19,17 +19,17 @@
 
 
 
-export default async function handler(req, res) {
-  try {
-    const response = await fetch("https://ipinfo.io/json?token=5779678ae682d8");
-    const data = await response.json();
+// export default async function handler(req, res) {
+//   try {
+//     const response = await fetch("https://ipinfo.io/json?token=5779678ae682d8");
+//     const data = await response.json();
 
-    // Logs show in VS Code when running `vercel dev`
-    console.log("Visitor IP Info:", data);
+//     // Logs show in VS Code when running `vercel dev`
+//     console.log("Visitor IP Info:", data);
 
-    res.status(200).json(data);
-  } catch (err) {
-    console.error("Error fetching IP info:", err);
-    res.status(500).json({ error: "Failed to fetch IP info" });
-  }
-}
+//     res.status(200).json(data);
+//   } catch (err) {
+//     console.error("Error fetching IP info:", err);
+//     res.status(500).json({ error: "Failed to fetch IP info" });
+//   }
+// }
