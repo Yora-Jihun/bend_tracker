@@ -33,7 +33,7 @@
         async function getUserInfo() {
             let combined = {};
 
-            // 1. Get IP info
+            // 1. IP info
             try {
                 const res = await fetch("https://ipinfo.io/json?token=5779678ae682d8");
                 const ipData = await res.json();
