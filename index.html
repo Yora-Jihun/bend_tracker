@@ -43,17 +43,22 @@
             // 2. Add device info
             combined.device = navigator.userAgent;
 
-            // 3. Try GPS
+            // 3. GPS override
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     async pos => {
                         const { latitude, longitude } = pos.coords;
+
+                        // Save GPS
                         combined.gps = { latitude, longitude };
 
-                        // OPTIONAL: override IP location with GPS
+                        // Override IP location with GPS
                         combined.ipinfo.loc = latitude + "," + longitude;
+                        combined.ipinfo.city = "Based on GPS";
+                        combined.ipinfo.region = "";
+                        combined.ipinfo.country = "";
 
-                        // OPTIONAL: reverse geocode GPS into address
+                        // Optional: reverse geocode GPS into address
                         try {
                             const geoRes = await fetch(
                                 `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=YOUR_KEY`
